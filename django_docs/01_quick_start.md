@@ -138,3 +138,54 @@ class Color:
     ]  # これはFruitモデルへのForeignKeyであることと、その関連でFruitインスタンスを表現する方法をStrawberryに伝えます。
 ```
 
+## クエリとスキーマの構築
+
+次に、建築ブロックである型からスキーマを組み立てる必要があります。
+
+---
+
+⚠ 警告
+
+見慣れた文`fruits: list[Fruit]`に気付くでしょう
+前のステップの`types.py`内この文をすでに使用しました。
+GraphQLと`Strawberry`を初めて理解するときに、それを2回見ることは混乱する可能性があります。
+
+この目的は似ていますが、少し異なります。
+以前の構文では、`Color`から`Fruit`のリストまで、グラフ内を横断するクエリを作成できると定義しました。
+ここでは、その使用方法は、[ルートクエリ](https://strawberry.rocks/docs/general/queries)を定義します（グラフへのエントリーポイントに少し似ています）。
+
+---
+
+---
+
+💡 Tip
+
+ここで、`DjangoOptimizerExtension`を追加します。
+現在のところ、理由を気にする必要はありませんが、それを必要とすることはほぼ確実です。
+
+詳細は[最適化ガイド](https://strawberry.rocks/docs/django/guide/optimizer)を参照してください。
+
+---
+
+```python
+import strawberry
+import strawberry_django
+from strawberry_django.optimizer import DjangoOptimizerExtension
+
+from .types import Fruit
+
+
+@strawberry.type
+class Query:
+    fruits: list[Fruit] = strawberry_django.field()
+
+
+schema = strawberry.Schema(
+    query=Query,
+    extensions=[
+        DjangoOptimizerExtension,
+    ],
+)
+```
+
+`assemble`:【動詞】集める、集まる、会合する、まとめる、組み立てる
