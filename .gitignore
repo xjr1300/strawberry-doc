@@ -38,3 +38,6 @@ venv/
 
 # resources
 resources/
+
+# django
+db.sqlite3
