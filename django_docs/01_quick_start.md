@@ -189,3 +189,68 @@ schema = strawberry.Schema(
 ```
 
 `assemble`:【動詞】集める、集まる、会合する、まとめる、組み立てる
+
+## APIの提供
+
+これで、披露しています。
+既存のDjangoアプリケーションはユーザー志向でないモデルのドキュメント文字列とヘルプテキストを持っている可能性があるため、これはデフォルトでは有効ではありません。
+しかし、クリーンな状態で開始（または既存のドキュメント文字列とヘルプテキストを徹底的に見直す）した場合、次の準備はAPIのユーザーにとって非常に便利です。
+
+もし、これらを行っていない場合、常にユーザー志向の説明を提供できます。
+
+```python
+# demo/settings.py
++STRAWBERRY_DJANGO = {
++    "FIELD_DESCRIPTION_FROM_HELP_TEXT": True,
++    "TYPE_DESCRIPTION_FROM_MODEL_DOCSTRING": True,
++}
+```
+
+```python
+# demo/urls.py
+from django.contrib import admin
+from django.urls import path
+from strawberry.django.views import AsyncGraphQLView
+
+from fruits.schema import schema
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("graphql/", AsyncGraphQLView.as_view(schema=schema)),
+]
+```
+
+これは次のスキーマを生成します。
+
+```graphql
+enum FruitCategory {
+  CITRUS
+  BERRY
+}
+
+"""
+美味しい果物
+"""
+type Fruit {
+  id: ID!
+  name: String!
+  category: FruitCategory!
+  color: Color
+}
+
+type Color {
+  id: ID!
+  """
+  field description
+  """
+  name: String!
+  fruits: [Fruit!]
+}
+
+type Query {
+    fruit: [Fruit!]!
+}
+```
+
+`show off`:【動詞】披露する、見せびらかす、引き立てる、よく見せる
+`overhaul`:【動詞】徹底的に点検する、徹底的に見直す、
