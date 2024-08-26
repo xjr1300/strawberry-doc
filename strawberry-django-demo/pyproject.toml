@@ -13,7 +13,11 @@ django-choices-field = "^2.3.0"
 
 [tool.poetry.group.dev.dependencies]
 django-stubs = { extras = ["compatible-mypy"], version = "^5.0.4" }
+mypy = "^1.11.2"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+plugins = ["strawberry.ext.mypy_plugin"]

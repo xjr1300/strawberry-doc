@@ -96,3 +96,45 @@ poetry run python manage.py migrate
 
 これで、Djangoの`shell`、`admin`、`loaddata`コマンドまたはいくつかの果物と色をロードする好みのツールを使用できます。
 赤いイチゴを積んでおいたので（予想通りですよね？！）、後で使えるように準備しました。
+
+## 型の定義
+
+クエリを作成する雨に、それぞれのモデルの`type`を定義する必要があります。
+`type`はスキーマの基礎的なユニットであり、GraphQLサーバーから問い合わせされるデータの形状を説明します。
+型はスカラー値（文字列、整数、論理値、浮動小数点そしてID）、列挙型、または多くのフィールドで構成される複雑なオブジェクトを表現します。
+
+---
+
+💡 Tip
+
+`strawberry-graphql-django`の鍵となる機能は、モデルフィールドから型（そしてドキュメントも！！）を自動的に類推することにより、Djangoモデルから型を作成するヘルパーを提供します。
+
+詳細は[フィールドガイド](https://strawberry.rocks/docs/django/guide/fields)を参照してください。
+
+---
+
+```python
+# fruits/types.py
+import strawberry_django
+from strawberry import auto
+
+from . import models
+
+
+@strawberry_django.type(models.Fruit)
+class Fruit:
+    id: auto
+    name: auto
+    category: auto
+    color: "Color"  # Strawberryは、これが次に定義された"Color"型を参照することを理解します。
+
+
+@strawberry_django.type(models.Color)
+class Color:
+    id: auto
+    name: auto
+    fruits: list[
+        Fruit
+    ]  # これはFruitモデルへのForeignKeyであることと、その関連でFruitインスタンスを表現する方法をStrawberryに伝えます。
+```
+
