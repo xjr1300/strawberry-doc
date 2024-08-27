@@ -97,6 +97,40 @@ poetry run python manage.py migrate
 これで、Djangoの`shell`、`admin`、`loaddata`コマンドまたはいくつかの果物と色をロードする好みのツールを使用できます。
 赤いイチゴを積んでおいたので（予想通りですよね？！）、後で使えるように準備しました。
 
+```json
+// fruits/fixtures/colors.json
+[
+  { "model": "fruits.color", "pk": 1, "fields": { "name": "赤" } },
+  { "model": "fruits.color", "pk": 2, "fields": { "name": "小紫" } }
+]
+```
+
+```json
+// fruits/fixtures/fruits.json
+[
+  {
+    "model": "fruits.fruit",
+    "pk": 1,
+    "fields": { "name": "いちご", "category": "berry", "color": 1 }
+  },
+  {
+    "model": "fruits.fruit",
+    "pk": 2,
+    "fields": { "name": "ラズベリー", "category": "berry", "color": 1 }
+  },
+  {
+    "model": "fruits.fruit",
+    "pk": 3,
+    "fields": { "name": "ブルーベリー", "category": "berry", "color": 2 }
+  }
+]
+```
+
+```sh
+poetry run python manage.py loaddata fruits/fixtures/colors.json
+poetry run python manage.py loaddata fruits/fixtures/fruits.json
+```
+
 ## 型の定義
 
 クエリを作成する雨に、それぞれのモデルの`type`を定義する必要があります。
@@ -207,6 +241,12 @@ schema = strawberry.Schema(
 ```
 
 ```python
+ # demo/settings.py
+-WSGI_APPLICATION = "demo.wsgi.application"
++ASGI_APPLICATION = "demo.asgi.application"
+```
+
+```python
 # demo/urls.py
 from django.contrib import admin
 from django.urls import path
@@ -254,3 +294,47 @@ type Query {
 
 `show off`:【動詞】披露する、見せびらかす、引き立てる、よく見せる
 `overhaul`:【動詞】徹底的に点検する、徹底的に見直す、
+
+## APIの使用
+
+次でサーバーを起動します。
+
+```sh
+poetry run python manage.py runserver
+```
+
+そして、ブラウザーで<http://localhost:8000/graphql/>を訪問します。
+Djangoによって提供されたGraphQLエクスプローラーを見るはずです。
+対話型のクエリツールを使用して、前に追加した果物を問い合わせできます。
+
+![GraphiQL](https://strawberry.rocks/_astro/graphiql-with-fruit.DTJ9EyOy_Z2pOmCT.webp)
+
+```graphql
+{
+  fruits {
+    id
+    category
+    name
+    color {
+      id
+      name
+    }
+  }
+}
+```
+
+## 次のステップ
+
+1. より多くのDjangoの型を定義する
+2. それらの型の内部にフィールドを定義する
+3. ASGIまたはWSGIを使用してAPIを提供する
+4. フィールドのフィルタを定義する
+5. フィールドの順番を定義する
+6. フィールドのページ分割を定義する
+7. スキーマにクエリを定義する
+8. スキーマにミューテーションを定義する
+9. スキーマにサブスクリプションを定義する
+10. 性能を改善するためにクエリオプティマイザーを有効にする
+11. 高度なページ区切りとモデルの再取得のためにrelay統合を使用する
+12. パーミッションエクステンションを使用してフィールドを保護する
+13. スキーマのユニットテストを記述する

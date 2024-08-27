@@ -1,0 +1,17 @@
+[
+  {
+    "model": "fruits.fruit",
+    "pk": 1,
+    "fields": { "name": "いちご", "category": "berry", "color": 1 }
+  },
+  {
+    "model": "fruits.fruit",
+    "pk": 2,
+    "fields": { "name": "ラズベリー", "category": "berry", "color": 1 }
+  },
+  {
+    "model": "fruits.fruit",
+    "pk": 3,
+    "fields": { "name": "ブルーベリー", "category": "berry", "color": 2 }
+  }
+]

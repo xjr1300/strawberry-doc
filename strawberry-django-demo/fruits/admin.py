@@ -1,3 +1,15 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Color, Fruit
+
+
+class FruitAdmin(admin.ModelAdmin):
+    pass
+
+
+class ColorAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Fruit, FruitAdmin)
+admin.site.register(Color, ColorAdmin)

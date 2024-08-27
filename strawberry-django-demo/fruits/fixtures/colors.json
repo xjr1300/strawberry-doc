@@ -1,0 +1,4 @@
+[
+  { "model": "fruits.color", "pk": 1, "fields": { "name": "赤" } },
+  { "model": "fruits.color", "pk": 2, "fields": { "name": "小紫" } }
+]

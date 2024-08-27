@@ -21,6 +21,9 @@ class Fruit(models.Model):
         help_text="この種類の果物の色",
     )
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class Color(models.Model):
     """おいしい果物の色合い"""
@@ -29,3 +32,6 @@ class Color(models.Model):
         max_length=20,
         help_text="色の名前",
     )
+
+    def __str__(self) -> str:
+        return self.name
